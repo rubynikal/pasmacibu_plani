@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %} Visi plāni {% endblock %}
+
+{% block content %}
+  <div class="all">
+    <h2>Plāni, kas ir progresā</h2>
+    <table>
+      <tr>
+        <th>Plāna nosaukums</th>
+        <th>Progress</th>
+      </tr>
+      {% for i in range(in_progress|length) %}
+      <tr>
+        <td><a href="{{ url_for('single.single', nosaukums=in_progress[i][0]) }}">{{in_progress[i][0]}}</a></td>
+        <td><progress value="{{ in_progress_st[i][0] }}" max="{{ in_progress_st[i][1] }}"></progress></td>
+      </tr>
+      {% endfor %}
+    </table> 
+    <h2>Neuzsāktie plāni</h2>
+    <table>
+      <tr>
+        <th>Plāna nosaukums</th>
+        <th>Progress</th>
+      </tr>
+      {% for i in range(not_started|length) %}
+      <tr>
+        <td><a href="{{ url_for('single.single', nosaukums=not_started[i][0]) }}">{{not_started[i][0]}}</a></td>
+        <td><progress value="{{ not_started_st[i][0] }}" max="{{ not_started_st[i][1] }}"></progress></td>
+      </tr>
+      {% endfor %}
+    </table> 
+    <h2>Pabeigtie plāni</h2>
+    <table>
+      <tr>
+        <th>Plāna nosaukums</th>
+        <th>Progress</th>
+      </tr>
+      {% for i in range(completed_plans|length) %}
+      <tr>
+        <td><a href="{{ url_for('single.single', nosaukums=completed_plans[i][0]) }}">{{completed_plans[i][0]}}</a></td>
+        <td><progress value="{{ completed_plans_st[i][0] }}" max="{{ completed_plans_st[i][1] }}"></progress></td>
+      </tr>
+      {% endfor %}
+    </table> 
+    <p>{{ done }}</p>
+  </div>
+{% endblock %}

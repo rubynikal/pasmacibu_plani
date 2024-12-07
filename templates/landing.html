@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Pašmācību plānu ģenerātors{% endblock %}
+{% block content %}
+  <div class="landhi">
+    {% if "username" in session %}
+      <h3>Laipni lūgti, {{ session["username"] }}</h3>
+    {% else %}
+      <h3>Laipni lūgti! Lūdzu, <a href="{{ url_for('login.login') }}">ielogojieties</a> vai <a href="{{ url_for('register.register') }}">reģistrējies</a>, lai izmantotu vietnes funkcijas.</h3>
+    {% endif %}
+  </div>
+    <div class="land">
+      <div class="sections">
+        <h2>Jauno plānu ģenerēšana!</h2>
+        <p> Izveidojiet Sev piemēroto mācību plānu jebkuram mācību priekšmetam un tematam, norādot tikai pašu tematu, pieejamo laiku un zināšanu līmeni!</p>
+        <p> Glabājiet Savus plānus, lai izmantotu tos ērtā veidā!</p>
+        <a class="abutton" href="{{ url_for('jauns.jauns') }}">Izveidot jaunu plānu</a>
+      </div>
+      <div class="sections">
+        <h2>Esošo plānu pārskats!</h2>
+        <p> Apskatiet Savus iepriekš izveidotus plānus un to izpildes statusus, sadalītus kategorijās pēc Jūsu progresa!</p>
+        <p> Izvēlieties plānu, kuru vēlieties pildīt vai apskatīt precīzi, un turpiniet mācīties! </p>
+        <a class="abutton" href="{{ url_for('visi.visi') }}">Apskatīt plānus</a>
+      </div>
+      <div class="sections">
+        <h2>Sekošana progresam!</h2>
+        <p> Azīmējiet, kurus soļus no plāna jau esat izpildījis/usi, un progresa līnija paradīs Jūsu sasniegumus pašmācībās! </p>
+        <p> Apskatot visus plānus, redzēsiet progresu visos priekšmētos/tematos, kurus mēģinājāt pašvadīti apgūt!</p>
+        <a class="abutton" href="{{ url_for('visi.visi') }}">Apskatīt plānus</a>
+      </div>
+    </div>
+    
+{% endblock %}
+
+

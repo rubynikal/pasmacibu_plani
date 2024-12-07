@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %} Jauna plāna ģenerēšana {% endblock %}
+
+{% block content %}
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
+    <p>Plāns ģenerējas...</p>
+  </div>
+
+  <div class="jauns">
+    <h2>Uzģenerējiet personalizētu mācību plānu pašmācībām jebkuram priekšmetam un tematam!</h2>
+    <form id="generate-form" action="/jauns" method="POST">
+      <br>
+      <label for="temats"><span>Mācību plāna temats</span> - pēc iespējas precīzāk aprakstiet, par ko Jums ir jāmācās, piemēram,<br> "Jaukti salikti teikumi angļu valodā, 12. klasei."</label><br>
+      <input type="text" name="temats" placeholder="Par ko izveidot mācību plānu?" required>
+      <br>
+      <br>
+      <label for="nedelas"><span>Laika apjoms</span> - cik daudz Jums ir laika, piemēram, 2 nedēļas pa 2 stundām dienā.</label>
+      <div class="laiks">
+        <input type="number" name="nedelas" id="nedelas" max="5" min="1" required> <p> nedēļas pa </p>
+        <input type="number" name="stundas" id="stundas" max="9" min="1" required> <p> stundām dienā.</p>
+      </div>
+      <br>
+      <br>
+      <label for="zinlim">Kāds ir Jūsu <span>zināšanu līmenis?</span></label><br>
+        <select name="zinlim" id="zinlim">
+          <option value="uzsacejs">Uzsācējs (vispār neko nezinu par tematu)</option>
+          <option value="videjais">Vidējais (kaut ko zinu un saprotu, bet ne visu)</option>
+          <option value="profesionals">Profesionāls (zinu un saprotu tematu, gribu padziļināt izpratni un pārliecināties zināšanās)</option>
+        </select>
+      <input type="submit" value="Uzģenerēt!" class="submit">
+    </form>
+    <br>
+    {% if plans != [] %}
+      {% if nosaukums != "Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz." and nosaukums != "Jūms jau ir plāns par šo tematu. Lūdzu, izvelieties citu!" %}
+        <h2 id="generated-plan">{{nosaukums}}</h2>
+        {% for solis in plans %}
+        <ul>
+          <div class="solis">
+            {% for detail in solis %}
+              <li>{{ detail|safe }}</li>
+            {% endfor %}
+          </div>
+        </ul>
+          {% endfor %}
+          
+        <div class="buttons">
+          <form action="/savereturn" method="POST">
+            <input type="hidden" name="plans" value="{{ tosave['plans'] }}">
+            <input type="hidden" name="nosaukums" value="{{ tosave['nosaukums'] }}">
+            <input type="hidden" name="done_st" value="{{ tosave['done_st'] }}">
+            <button type="submit">Saglabāt</button>
+          </form>
+          <form id="regenerate-form" action="/regenerate" method="POST">
+            <button type="submit">Pārģenerēt</button>
+          </form>
+        </div>
+      {% else %}
+        <h2 id="generated-plan">{{nosaukums}}</h2>
+      {% endif %}
+    {% endif %}
+  </div>
+  <script>
+    window.onload = function() {
+      if (document.getElementById('generated-plan')) {
+        document.getElementById('generated-plan').scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    document.getElementById('generate-form').addEventListener('submit', function () {
+      document.getElementById('loader').style.display = 'flex';
+    });
+
+    document.getElementById('regenerate-form').addEventListener('submit', function () {
+      document.getElementById('loader').style.display = 'flex';
+    });
+
+  </script>
+{% endblock %}

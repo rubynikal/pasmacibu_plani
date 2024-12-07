@@ -1,0 +1,38 @@
+{% extends  "base.html" %}
+{% block title %} {{ username }} plāns {% endblock %}
+
+{% block content %}
+  <div class="single">
+    <a href="{{ url_for('visi.visi') }}">Atgriezties pie visiem plāniem</a>
+    <h1>{{ nosaukums }}</h1>
+    <progress value="{{ completed }}" max="{{ total }}"></progress>
+    <p>Jūs izpildījāt {{ perc }}% no plāna!</p>
+    <ul>
+      {% for i in range(plans|length) %}
+        <li class="butnstep {% if statuses[i] == 1 %} completed {% else %} not-completed {% endif %}">
+          <form method="POST" class="btn">
+            <button 
+              type="submit" 
+              name="step_{{ i }}" 
+              value="{{ statuses[i] }}" 
+              class="{% if statuses[i] == 1 %} btn-completed {% else %} btn-not-completed {% endif %}">
+            </button>
+          </form>
+          <ul>
+            <div class="solis">
+              {% for detail in plans[i] %}
+                <li>{{ detail|safe }}</li>
+              {% endfor %}
+            </div>
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+    <center>
+    <form action="{{ url_for('delete.delete', nosaukums=nosaukums) }}" method="POST">
+      <button type="submit" class="deletebtn">Nodzēst Plānu</button>
+    </form>
+    </center>
+  </div>
+  
+{% endblock %}

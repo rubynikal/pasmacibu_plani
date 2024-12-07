@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Reģistrācija{% endblock %}
+{% block content %}
+  <div class="login">
+    <h1>Reģistrējies</h1>
+    <p>{{ error }}</p>
+    <form method="POST">
+      <br>
+      <input type="text" name="name" placeholder="Lietotājvārds" required>
+      <br>
+      <br>
+      <input type="password" name="password" placeholder="Parole" pattern=".{8,}" title="Parolē ir jābūt vismaz 8 simboliem" required>
+      <br>
+      <br>
+      <input type="submit" value="Iesniegt" class="submit">
+    </form>
+    <br>
+    <h3>Jau ir konts? <a href="{{ url_for('login.login') }}">Autorizējies!</a></h3>
+  </div>
+
+{% endblock %}

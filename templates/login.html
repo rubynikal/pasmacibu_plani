@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Ielogošanās{% endblock %}
+{% block content %}
+  <div class="login">
+    <h1>Autorizējies!</h1>
+    <p>{{ error }}</p>
+    <form method="POST">
+      <br>
+      <input type="text" name="name" placeholder="Lietotājvārds" required>
+      <br>
+      <br>
+      <input type="password" name="password" placeholder="Parole" required>
+      <br>
+      <br>
+      <input type="submit" value="Iesniegt" class="submit">
+    </form>
+    <br>
+    <h3>Vēl nav konta? <a href="{{ url_for('register.register') }}">Reģistrējies!</a></h3>
+  </div>
+{% endblock %}
