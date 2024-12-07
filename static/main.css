@@ -1,0 +1,544 @@
+/* Base lapa */
+body {
+  margin: 0;
+  background-color: #042a51;
+  color: #ffffff;
+  font-family: Trebuchet MS, sans-serif;
+}
+
+
+nav {
+  background-color: #11003d;
+  padding: 20px 20px 20px 20px;
+  max-width: 100vw;
+}
+
+nav ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  font-family: Trebuchet MS, sans-serif;
+  flex-wrap: wrap;
+}
+
+nav li.header a {
+  font-weight: bold;
+  font-size: 1.5rem; 
+  color: #80d8f7;
+  padding-left: 20px;
+}
+
+nav li.page {
+  font-size: 1.2rem;
+}
+
+.pages {
+  display: flex;
+}
+
+.pages li {
+  padding: 0 1.8rem 0 1.8rem;
+}
+
+nav li.page a {
+  text-decoration: none;
+  color: #ffffff; 
+  padding: 8px 12px;
+  transition: transform 0.3s;
+  display: inline-block
+}
+
+nav li.page a:hover {
+  transform: scale(1.07);
+  color: #80d8f7; 
+}
+
+.content {
+  padding: 0 5% 0 5%;
+}
+
+/* Visu plānu lapa */
+.all h2 {
+  text-align: center;
+  color: #80d8f7;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Tabulas */
+table {
+  width: 100%;
+  max-width: 1100px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background-color: #11003d;
+  color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #042a51;
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 40%;  
+}
+
+th {
+  background-color: #043565;
+  font-size: 1.1rem;
+  color: #80d8f7;
+}
+
+td {
+  font-size: 1rem;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #80d8f7;
+}
+
+/* Progress */
+progress {
+  width: 100%;
+  height: 20px;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #043565; 
+  border-radius: 5px;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: #80d8f7;
+  border-radius: 5px;
+}
+
+progress[value]::-moz-progress-bar {
+  background-color: #80d8f7;
+  border-radius: 5px;
+}
+
+progress {
+  background-color: #043565;
+}
+
+/* Jauna plāna lapa */
+
+.jauns h1, h2 {
+  color: #80d8f7;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.jauns form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 1100px;
+  margin: 20px auto;
+  margin-bottom: 10px;
+  padding: 20px;
+  background-color: #11003d;
+  border-radius: 8px;
+}
+
+.jauns label {
+  font-size: 1.3rem;
+  color: #ffffff;
+}
+
+span {
+  color:#80d8f7;
+  font-weight: bold;
+}
+
+.jauns input[type="text"], select {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: #043565;
+  color: #ffffff;
+}
+
+.jauns input[type="text"]:focus, select:focus {
+  border: 2px solid #80d8f7;
+}
+
+.jauns input[type="submit"], .jauns button[type="submit"], .deletebtn {
+  background-color: #80d8f7;
+  color: #11003d;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.jauns input[type="submit"]:hover, .jauns button[type="submit"]:hover, form[action="/savereturn"] button:hover, form[action="/regenerate"] button:hover, .deletebtn:hover{
+  background-color: #ffffff;
+}
+
+.jauns .laiks{
+  display: flex;
+  align-items: center; /* Align elements vertically */
+  gap: 10px; /* Add space between items */
+}
+
+.jauns input[name="nedelas"], .jauns input[name="stundas"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: #043565;
+  color: #ffffff;
+  width: 50px;
+  height: 20px;
+  text-align: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  background-color: #042a51; 
+  color: white; 
+  border-radius: 50%; 
+  border: none; 
+}
+
+.laiks p {
+  font-size: 1.2rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px; 
+  justify-content: center; 
+  margin: 10px 0; 
+}
+
+.buttons form {
+  flex: 1; 
+  max-width: 400px;
+}
+
+.buttons button {
+  width: 100%; 
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buttons button:hover {
+  background-color: #ffffff;
+}
+
+.jauns ul {
+  list-style-type: none;
+}
+
+.jauns .solis {
+  max-width: 1100px;
+  margin: 20px auto;
+  margin-bottom: 10px;
+  padding: 20px;
+  background-color: #11003d;
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+/* Autorizācija un reģistrācija */
+
+.login input[type="text"], input[type="password"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: #043565;
+  color: #ffffff;
+}
+
+.login input[type="text"]:focus, input[type="password"]:focus {
+  border: 2px solid #80d8f7;
+}
+
+.login {
+  max-width: 400px;
+  margin: 20px auto;
+  margin-bottom: 10px;
+  padding: 20px;
+  text-align: center;
+  background-color: #11003d;
+  border-radius: 8px;
+}
+
+.login input[type="submit"]{
+  background-color: #80d8f7;
+  color: #11003d;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 52%;
+}
+
+.login input[type="submit"]:hover {
+  background-color: #ffffff;
+}
+
+/* Viena plāna lapa */
+.single .butnstep {
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr; 
+  align-items: center;           
+  gap: 10px;    
+  padding: 20px;     
+  border-radius: 8px;           
+}
+.completed {
+  background-color: #043565;
+  color: #7393B3;
+}
+
+.not-completed {
+  background-color: #11003d; 
+}
+
+.single .solis {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none; 
+}
+
+.single .butnstep ul {
+  padding: 0;
+}
+
+.btn-completed  {
+  background-color: #80d8f7;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-not-completed  {
+  background-color: #ffffff;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-completed:hover  {
+  background-color: #ffffff;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-not-completed:hover  {
+  background-color: #80d8f7;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.single a {
+  display: inline-block;
+  margin-top: 12px !important; 
+}
+
+/* Sākumlapa */
+
+.land {
+  margin-top: 20px;
+  display: flex;
+  gap: 30px;
+}
+
+.land .sections {
+  background-color: #11003d;
+  flex: 1; 
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;   
+}
+
+.abutton {
+  background-color: #80d8f7;
+  color: #11003d;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 52%;
+  display: inline-block;
+}
+
+.abutton:hover {
+  background-color: #ffffff;
+  color: #11003d;
+}
+
+.sections p {
+  font-size: 1.1rem;
+}
+
+/* Konta lapa */
+.account {
+  text-align: center;
+}
+
+.account button[type="submit"] {
+  background-color: #80d8f7;
+  color: #11003d;
+  border: none;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.account button[type="submit"]:hover {
+  background-color: #ffffff;
+}
+
+.account h3 {
+  color: #80d8f7;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(128, 216, 247, 0), rgba(128, 216, 247, 0.75), rgba(128, 216, 247, 0));
+}
+
+/* Loader */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: none; /* initially not visible */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.spinner {
+  border: 6px solid #11003d;
+  border-top: 6px solid #80d8f7;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #80d8f7;
+}
+
+
+/* mazāka ekrāna lietotājiem */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  th, td {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  
+  input[type="text"],
+  select {
+    font-size: 0.9rem;
+  }
+
+  input[type="submit"],
+  button {
+    font-size: 1rem;
+  }
+
+  .land {
+    flex-direction: column; 
+  }
+
+  .sections {
+    flex: none;
+    width: 100%;
+  }
+}
+
