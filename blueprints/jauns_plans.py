@@ -6,7 +6,7 @@ import regex
 import datetime
 
 #gemini api iestatījumi
-os.environ["API_KEY"] = 'AIzaSyBgn8YiRnasLmPpQoDhc7TEcJpqO7LACuM'
+os.environ["API_KEY"] = 'API key'
 genai.configure(api_key=os.environ["API_KEY"])
 
 model_config = {
