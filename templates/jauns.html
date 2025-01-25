@@ -11,14 +11,18 @@
     <h2>Uzģenerējiet personalizētu mācību plānu pašmācībām jebkuram priekšmetam un tematam!</h2>
     <form id="generate-form" action="/jauns" method="POST">
       <br>
-      <label for="temats"><span>Mācību plāna temats</span> - pēc iespējas precīzāk aprakstiet, par ko Jums ir jāmācās, piemēram,<br> "Jaukti salikti teikumi angļu valodā, 12. klasei."</label><br>
+      <label for="temats"><span>Mācību plāna temats</span> - īsi norādiet, par ko Jums ir jāmācās.</label><br>
       <input type="text" name="temats" placeholder="Par ko izveidot mācību plānu?" required>
       <br>
       <br>
-      <label for="nedelas"><span>Laika apjoms</span> - cik daudz Jums ir laika, piemēram, 2 nedēļas pa 2 stundām dienā.</label>
+      <label for="detalas"><span>Temata detaļas</span> - labākiem rezultātiem norādiet, kuras ar to saistītas tēmas jau esat apguvusi un kāds ir Jūsu vēlamais sasniedzamais rezultāts.</label><br>
+      <input type="text" name="detalas" placeholder="Temata detaļas" required>
+      <br>
+      <br>
+      <label for="dienas"><span>Laika apjoms</span> - cik daudz Jums ir laika, piemēram, 14 dienas pa 2 stundām dienā.</label>
       <div class="laiks">
-        <input type="number" name="nedelas" id="nedelas" max="5" min="1" required> <p> nedēļas pa </p>
-        <input type="number" name="stundas" id="stundas" max="9" min="1" required> <p> stundām dienā.</p>
+        <input type="number" name="dienas" id="dienas" max="30" min="1" required> <p> dienas pa </p>
+        <input type="number" name="stundas" id="stundas" max="9" min="0" required> <p> stundām dienā.</p>
       </div>
       <br>
       <br>
@@ -34,6 +38,7 @@
     {% if plans != [] %}
       {% if nosaukums != "Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz." and nosaukums != "Jūms jau ir plāns par šo tematu. Lūdzu, izvelieties citu!" %}
         <h2 id="generated-plan">{{nosaukums}}</h2>
+        <div class="ievads">  {{ievads|safe}} </div>
         {% for solis in plans %}
         <ul>
           <div class="solis">
@@ -42,7 +47,7 @@
             {% endfor %}
           </div>
         </ul>
-          {% endfor %}
+        {% endfor %}
           
         <div class="buttons">
           <form action="/savereturn" method="POST">
