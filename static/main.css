@@ -1,16 +1,70 @@
+/* Default theme (dark mode) */
+:root {
+  --bg-color: #042a51;
+  --nav-bg: #11003d;
+  --biglink-color: #80d8f7;
+  --link-color: #ffffff;
+  --link-hover: #80d8f7;
+  --button-bg: #80d8f7;
+  --button-text: #11003d;
+  --button-bg-hover: #ffffff;
+  --button-text-hover: #11003d;
+  --bott-border: none;
+  --big-text: #80d8f7;
+  --text: #ffffff;
+  --sect-color: #11003d;
+  --accent: #80d8f7;
+  --input: #043565;
+  --input-text: #ffffff;
+  --table-bg: #11003d;
+  --progr: #80d8f7;
+  --done: #7393B3;
+  --table-bg: #043565;
+  --table-head: #80d8f7;
+}
+
+/* Light theme */
+:root.light-mode {
+  --bg-color: #ffffff;
+  --nav-bg: #ffffff;
+  --biglink-color: #11003d;
+  --link-color: #11003d;
+  --link-hover: #6a47c3;
+  --button-bg-hover: #6a47c3;
+  --button-bg: #11003d;
+  --button-text-hover: #11003d;
+  --button-text: #ffffff;
+  --bott-border: 2px solid #11003d;
+  --big-text: #6a47c3;
+  --text: #11003d;
+  --sect-color: #ffffff;
+  --accent: #6a47c3;
+  --input: #ffffff;
+  --input-text: #11003d;
+  --table-bg: #ffffff;
+  --progr: #6a47c3;
+  --done: #11003d79;
+  --table-bg: #11003d;
+  --table-head: #ffffff;
+}
+
 /* Base lapa */
 body {
   margin: 0;
-  background-color: #042a51;
-  color: #ffffff;
+  background-color: var(--bg-color);
+  color: var(--text);
   font-family: Trebuchet MS, sans-serif;
 }
 
+h1, h2 {
+  color: var(--big-text);
+}
 
 nav {
-  background-color: #11003d;
+  background-color: var(--nav-bg);
   padding: 20px 20px 20px 20px;
   max-width: 100vw;
+  border-bottom: var(--bott-border);
 }
 
 nav ol {
@@ -27,8 +81,9 @@ nav ol {
 nav li.header a {
   font-weight: bold;
   font-size: 1.5rem; 
-  color: #80d8f7;
+  color: var(--biglink-color);
   padding-left: 20px;
+  text-decoration: none;
 }
 
 nav li.page {
@@ -45,7 +100,7 @@ nav li.page {
 
 nav li.page a {
   text-decoration: none;
-  color: #ffffff; 
+  color: var(--link-color); 
   padding: 8px 12px;
   transition: transform 0.3s;
   display: inline-block
@@ -53,7 +108,7 @@ nav li.page a {
 
 nav li.page a:hover {
   transform: scale(1.07);
-  color: #80d8f7; 
+  color: var(--link-hover); 
 }
 
 .content {
@@ -63,7 +118,7 @@ nav li.page a:hover {
 /* Visu plānu lapa */
 .all h2 {
   text-align: center;
-  color: #80d8f7;
+  color: var(--big-text);
   margin-top: 20px;
   font-weight: bold;
   font-size: 1.5rem;
@@ -74,10 +129,12 @@ table {
   width: 100%;
   max-width: 1100px;
   margin: 20px auto;
-  border-collapse: collapse;
-  background-color: #11003d;
+  background-color: var(--table-bg);
   color: #ffffff;
   border-radius: 8px;
+  border-collapse: separate; 
+  border-spacing: 0;
+  border: var(--bott-border);
   overflow: hidden;
   table-layout: fixed;
 }
@@ -92,14 +149,19 @@ th:nth-child(2), td:nth-child(2) {
   width: 40%;  
 }
 
+table a {
+  text-decoration: none;
+}
+
 th {
-  background-color: #043565;
+  background-color: var(--table-bg);
   font-size: 1.1rem;
-  color: #80d8f7;
+  color: var(--table-head);
 }
 
 td {
   font-size: 1rem;
+  background-color: var(--nav-bg);
 }
 
 tr:last-child td {
@@ -107,12 +169,12 @@ tr:last-child td {
 }
 
 a {
-  color: #ffffff;
-  text-decoration: none;
+  color: var(--link-color);
+  text-decoration: underline;
 }
 
 a:hover {
-  color: #80d8f7;
+  color: var(--link-hover);
 }
 
 /* Progress */
@@ -127,28 +189,29 @@ progress {
 }
 
 progress[value]::-webkit-progress-bar {
-  background-color: #043565; 
+  background-color: var(--progr); 
   border-radius: 5px;
 }
 
 progress[value]::-webkit-progress-value {
-  background-color: #80d8f7;
+  background-color: var(--progr);
   border-radius: 5px;
 }
 
 progress[value]::-moz-progress-bar {
-  background-color: #80d8f7;
+  background-color: var(--progr);
   border-radius: 5px;
 }
 
 progress {
-  background-color: #043565;
+  background-color: var(--input);
+  border: var(--bott-border);
 }
 
 /* Jauna plāna lapa */
 
 .jauns h1, h2 {
-  color: #80d8f7;
+  color: var(--big-text);
   text-align: center;
   font-weight: bold;
   font-size: 1.8rem;
@@ -162,38 +225,39 @@ progress {
   margin: 20px auto;
   margin-bottom: 10px;
   padding: 20px;
-  background-color: #11003d;
+  background-color: var(--sect-color);
+  border: var(--bott-border); 
   border-radius: 8px;
 }
 
 .jauns label {
   font-size: 1.3rem;
-  color: #ffffff;
+  color: var(--text);
 }
 
 span {
-  color:#80d8f7;
+  color: var(--accent);
   font-weight: bold;
 }
 
 .jauns input[type="text"], select {
   padding: 10px;
   font-size: 1rem;
-  border: none;
+  border: var(--bott-border);
   border-radius: 4px;
   outline: none;
-  background-color: #043565;
-  color: #ffffff;
+  background-color: var(--input);
+  color: var(--input-text);
 }
 
 .jauns input[type="text"]:focus, select:focus {
-  border: 2px solid #80d8f7;
+  border: 2px solid var(--accent);
 }
 
 .jauns input[type="submit"], .jauns button[type="submit"], .deletebtn {
-  background-color: #80d8f7;
-  color: #11003d;
-  border: none;
+  background-color: var(--input);
+  color: var(--input-text);
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -203,23 +267,29 @@ span {
 }
 
 .jauns input[type="submit"]:hover, .jauns button[type="submit"]:hover, form[action="/savereturn"] button:hover, form[action="/regenerate"] button:hover, .deletebtn:hover{
-  background-color: #ffffff;
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
+}
+
+.jauns input[type="submit"], .jauns button[type="submit"], form[action="/savereturn"] button, form[action="/regenerate"] button, .deletebtn{
+  background-color: var(--button-bg);
+  color: var(--button-text);
 }
 
 .jauns .laiks{
   display: flex;
-  align-items: center; /* Align elements vertically */
-  gap: 10px; /* Add space between items */
+  align-items: center; 
+  gap: 10px; 
 }
 
-.jauns input[name="nedelas"], .jauns input[name="stundas"] {
+.jauns input[name="dienas"], .jauns input[name="stundas"] {
   padding: 10px;
   font-size: 1rem;
-  border: none;
+  border: var(--bott-border);
   border-radius: 4px;
   outline: none;
-  background-color: #043565;
-  color: #ffffff;
+  background-color: var(--input);
+  color: var(--input-text);
   width: 50px;
   height: 20px;
   text-align: center;
@@ -253,7 +323,7 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 100%; 
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--button-text);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -261,11 +331,14 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .buttons button:hover {
-  background-color: #ffffff;
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
 }
 
 .jauns ul {
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .jauns .solis {
@@ -273,25 +346,38 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 20px auto;
   margin-bottom: 10px;
   padding: 20px;
-  background-color: #11003d;
+  background-color: var(--sect-color);
+  border: var(--bott-border);
   border-radius: 8px;
   font-size: 1.1rem;
 }
+
+.jauns .ievads {
+  max-width: 1100px;
+  margin: 20px auto;
+  margin-bottom: 10px;
+  padding: 20px;
+  background-color: var(--sect-color);
+  border: var(--bott-border);
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
 
 /* Autorizācija un reģistrācija */
 
 .login input[type="text"], input[type="password"] {
   padding: 10px;
   font-size: 1rem;
-  border: none;
+  border: var(--bott-border);
   border-radius: 4px;
   outline: none;
-  background-color: #043565;
-  color: #ffffff;
+  background-color: var(--input);
+  color: var(--input-text);
 }
 
 .login input[type="text"]:focus, input[type="password"]:focus {
-  border: 2px solid #80d8f7;
+  border: 2px solid var(--accent);
 }
 
 .login {
@@ -300,14 +386,15 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-bottom: 10px;
   padding: 20px;
   text-align: center;
-  background-color: #11003d;
+  background-color: var(--sect-color);
   border-radius: 8px;
+  border: var(--bott-border);
 }
 
 .login input[type="submit"]{
-  background-color: #80d8f7;
-  color: #11003d;
-  border: none;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -318,7 +405,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .login input[type="submit"]:hover {
-  background-color: #ffffff;
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
 }
 
 /* Viena plāna lapa */
@@ -331,13 +419,20 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 20px;     
   border-radius: 8px;           
 }
+
+.back {
+  margin-top: 12px !important;
+}
+
 .completed {
-  background-color: #043565;
-  color: #7393B3;
+  border: var(--bott-border);
+  background-color: var(--sect-color);
+  color: var(--done);
 }
 
 .not-completed {
-  background-color: #11003d; 
+  border: var(--bott-border);
+  background-color: var(--sect-color);
 }
 
 .single .solis {
@@ -347,14 +442,25 @@ input[type="number"]::-webkit-outer-spin-button {
   list-style: none; 
 }
 
+.single .ievads {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 20px;
+  list-style: none; 
+  border-radius: 8px;
+  border: var(--bott-border);
+  background-color: var(--sect-color);
+
+}
+
 .single .butnstep ul {
   padding: 0;
 }
 
 .btn-completed  {
-  background-color: #80d8f7;
+  background-color: var(--biglink-color);
   color: #ffffff;
-  border: none;
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -364,8 +470,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .btn-not-completed  {
-  background-color: #ffffff;
-  border: none;
+  background-color: var(--button-bg-hover);
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -376,7 +482,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .btn-completed:hover  {
   background-color: #ffffff;
-  border: none;
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -386,8 +492,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .btn-not-completed:hover  {
-  background-color: #80d8f7;
-  border: none;
+  background-color: var(--biglink-color);
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -398,7 +504,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .single a {
   display: inline-block;
-  margin-top: 12px !important; 
+  margin-top: 0; 
 }
 
 /* Sākumlapa */
@@ -410,17 +516,19 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .land .sections {
-  background-color: #11003d;
+  background-color: var(--sect-color);
   flex: 1; 
   border-radius: 8px;
   padding: 10px;
-  text-align: center;   
+  text-align: center; 
+  border: var(--bott-border);  
 }
 
 .abutton {
-  background-color: #80d8f7;
-  color: #11003d;
-  border: none;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: var(--bott-border);
+  text-decoration: none;
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -432,8 +540,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .abutton:hover {
-  background-color: #ffffff;
-  color: #11003d;
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
 }
 
 .sections p {
@@ -446,9 +554,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .account button[type="submit"] {
-  background-color: #80d8f7;
-  color: #11003d;
-  border: none;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: var(--bott-border);
   padding: 12px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -458,11 +566,29 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .account button[type="submit"]:hover {
-  background-color: #ffffff;
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
+}
+
+.account #theme-toggle {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: var(--bott-border);
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.account #theme-toggle:hover {
+  background-color: var(--button-bg-hover);
+  color: var(--button-text-hover);
 }
 
 .account h3 {
-  color: #80d8f7;
+  color: var(--accent);
 }
 
 hr {
@@ -488,7 +614,7 @@ hr {
 
 .spinner {
   border: 6px solid #11003d;
-  border-top: 6px solid #80d8f7;
+  border-top: 6px solid var(--accent);
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -503,7 +629,7 @@ hr {
 .loader p {
   margin-top: 10px;
   font-size: 18px;
-  color: #80d8f7;
+  color: var(--accent);
 }
 
 
