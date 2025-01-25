@@ -1,4 +1,4 @@
-/* Default theme (dark mode) */
+/* Tumšais režims */
 :root {
   --bg-color: #042a51;
   --nav-bg: #11003d;
@@ -23,7 +23,7 @@
   --table-head: #80d8f7;
 }
 
-/* Light theme */
+/* Gaišais režims */
 :root.light-mode {
   --bg-color: #ffffff;
   --nav-bg: #ffffff;
