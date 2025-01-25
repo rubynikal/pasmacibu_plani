@@ -6,7 +6,7 @@
     {% if "username" in session %}
       <h3>Laipni lūgti, {{ session["username"] }}</h3>
     {% else %}
-      <h3>Laipni lūgti! Lūdzu, <a href="{{ url_for('login.login') }}">ielogojieties</a> vai <a href="{{ url_for('register.register') }}">reģistrējies</a>, lai izmantotu vietnes funkcijas.</h3>
+      <h3>Laipni lūgti! Lūdzu, <a href="{{ url_for('login.login') }}"><u>autorizējieties</u></a> vai <a href="{{ url_for('register.register') }}"><u>reģistrējies</u></a>, lai izmantotu vietnes funkcijas.</h3>
     {% endif %}
   </div>
     <div class="land">
