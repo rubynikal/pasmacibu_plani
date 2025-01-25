@@ -6,21 +6,21 @@ import regex
 import datetime
 
 #gemini api iestatījumi
-os.environ["API_KEY"] = 'APIkey'
+os.environ["API_KEY"] = 'AIzaSyBgn8YiRnasLmPpQoDhc7TEcJpqO7LACuM'
 genai.configure(api_key=os.environ["API_KEY"])
 
 model_config = {
   "temperature": 0.7,
-  "top_p": 0.8,
+  "top_p": 1,
   "top_k": 5,
-  "max_output_tokens": 4096,
+  "max_output_tokens": 10000,
 }
 
 instruction = """You are a highly qualified and very precise teacher from Latvia. You create detailed, interesting, diverse and useful study plans for your students, according to the Skola2030 standards. You do it in Latvian. And you always name the steps of your plans (like "Nr. ", "Solis", "Uzdevums", "Resursi")"""
 
 model = genai.GenerativeModel('gemini-1.5-flash-latest', generation_config=model_config, system_instruction=instruction)
 
-def gen_resp(temats, limenis, laiks):
+def gen_resp(temats, limenis, laiks, detalas):
   """Atgriež atbildi, izmantojot Gemini AI API un sarakstīto uzvedni."""
   response = model.generate_content(f"""
 Hello! 
@@ -28,6 +28,7 @@ I am a student from Latvia and enjoy learning new things, but I struggle with pl
 
 Here is some information about me:
 - I would like to learn (in Latvian): {temats}
+- Some details about my current knoledge and objectives: {detalas}
 - My level is: {limenis}
 - I have this amount of time to study: {laiks}
 
@@ -36,26 +37,35 @@ Please create a detailed, diverse, and helpful study plan for me, following the 
 Response Formatting Rules:
 1. Language: Write the entire study plan in Latvian.
 2. Plan Structure:
-   - First, provide a brief, short, condensed title for the study plan (e.g., “Programming Basics Plan”). Do not write any introduction for the plan. Just the name and then the steps.
+   - First, provide a brief, short, condensed title for the study plan (e.g., “Programming Basics Plan”). Do not write any introduction for the plan. Just the name.
+   - Then, provide a short introduction about the topic: where and why this topic would be used and which topics it is connected to. Label the introduction by writing "Ievads:".
    - List each study step in sequence, using "Nr. ..." as the label for each new step.
 3. For Each Step:
    - Name each component within the step as follows:
-      - Laiks: Specify the exact time required (e.g., “2 hours”) and the exact day for the task (considering the time frame given, without skipping days).
-      - Solis: Describe the learning step (e.g., “Study data types”).
-      - Uzdevums: Describe an exercise to practice this step.
-      - Resursi: List recommended resources (e.g., YouTube videos, websites, or documents). Ensure the resources are functional, accurate, and suitable for the topic. Provide no more than 2-3 resources per step, with a brief description of each.
+      - Laiks: Specify the exact time required and the exact day for the task (considering the time frame given, without skipping days).
+      - Solis: Describe the learning step (e.g., “Study data types”). Start with the easiest, progress to the harder ones. Be precise.
+      - Uzdevums: Describe 3 exercises to practice this step. Make the exercises interesting and diverse. If the topic allows, give practical exercises and formulas. Between the exercises, write <br>.
+      - Resursi: List recommended resources e.g., YouTube videos, exact websites with links, real books, or documents. Ensure the resources are functional, accurate, and suitable for the topic, give links to the sources if possible. Provide no less than 2-3 resources per step, one must be a link to a website. Between the sources, write <br>. 
 
 4. Additional Requirements:
-   - Ensure all steps are covered in the given timeframe, including every day within the period specified.
-   - Avoid skipping any days.
-   - Use the specific format and names for each component in the steps (Laiks, Solis, Uzdevums, Resursi).
+   - Ensure all steps are covered in the given timeframe.
+   - You don't have to make one step the amount of hours I have, divide the time according to the step. But the entire plan must be the timeframe given.
+   - Avoid skipping any days or shortening the given timeframe. 
+   - Use the specific format and names for each component in each step (Ievads,Laiks, Solis, Uzdevums, Resursi).
+   - Make every single step detailed and full.
+   - The plan must have as many steps as there are days, each step full, with the components. Do not group the steps.
 """)
 
   plans = response.text.replace("*", " ").replace("#", "").replace("|", "").replace("\n","").replace("[", " ").replace("]", " ")
   nosaukums = plans
-  nosaukums = regex.sub(r'\d+\. diena', '', nosaukums.split("Nr")[0].strip()).strip()
+  nosaukums = regex.sub(r'\d+\. diena', '', nosaukums.split("Ievads:")[0].strip()).strip()
   nosaukums = nosaukums + "; " + session["username"]
-  return [plans,nosaukums]
+  ievads_start = plans.find("Ievads:")
+  ievads_end = plans.find("Nr. 1") if "Nr. 1" in plans else len(plans)
+  ievads = plans[ievads_start:ievads_end].strip() if ievads_start != -1 else ""
+  c_ievads = regex.sub(r'\d+\. diena', '', ievads).strip()
+  d_ievads = c_ievads.replace("Ievads:", "<span>Ievads:</span>")
+  return [plans,d_ievads,nosaukums]
 
 def formating(plans):
   """Atgriež pārformatēto Gemini atbildi divdimensiālā masīvā."""
@@ -105,7 +115,10 @@ def formating(plans):
   def format_text(item):
     """Pārveido plāna soļus, lai būtu iespējams izmainīt atslēgvārdu stilu."""
     for keyword in keywords:
-      item = item.replace(keyword, f"<span>{keyword}</span>")
+      if keyword == "Laiks":
+        item = item.replace(keyword, f"<span>{keyword}</span>").replace(",","")
+      else:
+        item = item.replace(keyword, f"<span>{keyword}</span>")
     return item
   
   last_result = []
@@ -115,6 +128,24 @@ def formating(plans):
 
   return last_result
 
+def remove_ltv(string): 
+  """Noņem latviešu valodas simbolus no teksta"""
+  latvian_to_english = {
+    'ā': 'a', 'č': 'c', 'ē': 'e', 'ģ': 'g', 'ī': 'i', 'ķ': 'k',
+    'ļ': 'l', 'ņ': 'n', 'š': 's', 'ū': 'u', 'ž': 'z'
+  }
+  
+  string = string.lower()
+  
+  result = ""
+  for char in string:
+    if char in latvian_to_english:
+      result += latvian_to_english[char]
+    else:
+      result += char
+
+  return result
+
 def compare_strings(str1, str2):
     """Salīdzina 2 tekstus, neņēmot vērā punktuāciju un citus simbolus."""
 
@@ -123,24 +154,40 @@ def compare_strings(str1, str2):
     cleaned_str2 = regex.sub(r'[^A-Za-z0-9]', '', str2).lower()
   
     return cleaned_str1 == cleaned_str2
+
+def resources(nosaukums):
+  """Pievieno papildresursus"""
+  keyword = ["matematika","anglu", "latviesu", "biologija", "dabaszinibas", "datorika", "dizains", "tehnologijas", "fizika", "francu", "geografija", "krievu", "kimija", "vesture", "literatura", "muzika", "socialas", "kultura", "maksla", "sports", "veseliba", "programmesana", "vacu"]
+  linki = ['<a href="https://skolo.lv/course/index.php?categoryid=7539">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7665">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7509">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7653">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7533">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7653">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7662">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7512">pamatskolai</a>, <a href="https://skolo.lv/course/view.php?id=190806">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7515">pamatskolai</a>, <a href="https://skolo.lv/course/view.php?id=353765">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7518">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7668">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7518">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7668">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7587">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7662">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7521">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7653">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7596">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7662">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7530">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7653">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7605">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7662">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7611">pamatskolai</a>, <a href="https://skolo.lv/course/index.php?categoryid=7659">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7536">pamatskolai</a>, <a href="https://skolo.lv/course/view.php?id=159636">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7545">pamatskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7659">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7656">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7656">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7671">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7671">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7668">vidusskolai</a>', '<a href="https://skolo.lv/course/index.php?categoryid=7653">vidusskolai</a>']
   
+  nos = remove_ltv(nosaukums)
+  nosaukums_dalas = nos.split()
+  num = 0
+  for i in nosaukums_dalas:
+    if i in keyword:
+      num = keyword.index(i)
+      return "<br>Latvijas izglītības sistēmas oficiālie resursi šīm, vai ar to saistītiem tematiem: "+linki[num]
+  return ""
+
 jauns_bp = Blueprint("jauns", __name__)
 
 @jauns_bp.route("/jauns", methods=["POST", "GET"])
 def jauns():
   correct_plan = []
   nosaukums = ""
+  ievads_d = ""
   tosave = {"plans": "", "nosaukums": "", "done_st": ""}
   if "username" not in session:
     return redirect(url_for("login.login"))
   if request.method == "POST":
     #dabūt ievadus
     temats = request.form["temats"]
-    nedelas = request.form["nedelas"]
+    detalas = request.form["detalas"]
+    dienas = request.form["dienas"]
     stundas = request.form["stundas"]
     limenis = request.form["zinlim"]
 
-    laiks = f"{str(nedelas)} nedēļas pa {str(stundas)} stundām dienā."
+    laiks = f"{str(dienas)} dienas pa {str(stundas)} stundām dienā."
     
     #saglabāt request
     with sqlite3.connect("users.db") as conn:
@@ -152,6 +199,7 @@ def jauns():
     session["temats"] = temats
     session["laiks"] = laiks
     session["limenis"] = limenis
+    session["detalas"] = detalas
 
     #pārbaudīt, vai lietotājam jau nav tāda plāna
     with sqlite3.connect("users.db") as conn:
@@ -164,7 +212,7 @@ def jauns():
     planame = temats + "; " + session["username"]
     for i in result:
       if compare_strings(i[0], planame):
-        return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Jūms jau ir plāns par šo tematu. Lūdzu, izvelieties citu!", tosave=tosave)
+        return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Jums jau ir plāns par šo tematu. Lūdzu, izvelieties citu!", tosave=tosave)
 
     if limenis == "uzsacejs":
       limenis = "a total beginner at this subject"
@@ -176,13 +224,13 @@ def jauns():
     #plāna ģenerēšana
     cycles = 0
     while True:
-      resp = gen_resp(temats,laiks,limenis)
+      resp = gen_resp(temats,laiks,limenis,detalas)
       plans = resp[0]
-      nosaukums = resp[1]
+      ievads = resp[1]
+      nosaukums = resp[2]
       cycles += 1
-      print(nosaukums)
       if cycles >= 5: #ja ģenerācija nenostrādāja pareizi 5 reizes
-        return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz.", tosave=tosave)
+        return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz.", tosave=tosave, ievads=ievads)
       if len(nosaukums) <= 120: #ja formātējums salūza, pārģenerēt
         break
     
@@ -193,11 +241,12 @@ def jauns():
     done_st = ["0" for _ in range(len(correct_plan))]
     done_st = ",".join(done_st)
 
-    nosaukums = temats + "; " + session["username"]
+    nosaukums = temats + " - " + session["username"]
+    ievads_d = ievads + resources(nosaukums)
 
     tosave = {"plans":plans, "nosaukums":nosaukums, "done_st": done_st}
         
-  return render_template("jauns.html", logged_in=True, plans=correct_plan, nosaukums=nosaukums, tosave=tosave)
+  return render_template("jauns.html", logged_in=True, plans=correct_plan, nosaukums=nosaukums, tosave=tosave, ievads=ievads_d)
 
 #plāna saglabāšana
 save_bp = Blueprint("save", __name__)
@@ -228,6 +277,7 @@ def regenerate():
   """Reģenerē plānu ar tiem pašiem pieprasījumiem."""
   correct_plan = []
   tosave = {"plans": "", "nosaukums": "", "done_st": ""}
+  ievads_d = ""
   if "username" not in session:
     return redirect(url_for("login.login"))
   
@@ -235,27 +285,31 @@ def regenerate():
   temats = session.get("temats")
   laiks = session.get("laiks")
   limenis = session.get("limenis")
+  detalas = session.get("detalas")
 
-  if not temats or not laiks or not limenis:
+  if not temats or not laiks or not limenis or not detalas:
     return redirect(url_for("jauns")) 
 
   #ģenerēt plānu
   cycles = 0
   while True:
-    resp = gen_resp(temats, laiks, limenis)
+    resp = gen_resp(temats,laiks,limenis, detalas)
     plans = resp[0]
-    nosaukums = resp[1]
+    ievads = resp[1]
+    nosaukums = resp[2]
     cycles += 1
-    if cycles >= 5:  
-      return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz.", tosave=tosave)
-    if len(nosaukums) <= 120:
+
+    if cycles >= 5: #ja ģenerācija nenostrādāja pareizi 5 reizes
+      return render_template("jauns.html", logged_in=True, plans=["",""], nosaukums="Kļūda plāna ģenerēšanā. Lūdzu, izmainiet savas prasības vai atjaunojiet lapu un pamēģiniet vēlreiz.", tosave=tosave, ievads=ievads)
+    if len(nosaukums) <= 120: #ja formātējums salūza, pārģenerēt
       break
 
   #plāna formatēšana
   correct_plan = formating(plans)
   done_st = ",".join(["0" for _ in range(len(correct_plan))])
-  nosaukums = temats + "; " + session["username"]
+  nosaukums = temats + " - " + session["username"]
+  ievads_d = ievads + resources(nosaukums)
 
   tosave = {"plans": plans, "nosaukums": nosaukums, "done_st": done_st}
 
-  return render_template("jauns.html", logged_in=True, plans=correct_plan, nosaukums=nosaukums, tosave=tosave)
+  return render_template("jauns.html", logged_in=True, plans=correct_plan, nosaukums=nosaukums, tosave=tosave, ievads=ievads_d)
