@@ -3,11 +3,12 @@
 
 {% block content %}
   <div class="single">
-    <a href="{{ url_for('visi.visi') }}">Atgriezties pie visiem plāniem</a>
+    <a href="{{ url_for('visi.visi') }}" class="back"> <u>Atgriezties pie visiem plāniem</u></a>
     <h1>{{ nosaukums }}</h1>
     <progress value="{{ completed }}" max="{{ total }}"></progress>
     <p>Jūs izpildījāt {{ perc }}% no plāna!</p>
     <ul>
+      <div class="ievads"> {{ievads|safe}} </div>
       {% for i in range(plans|length) %}
         <li class="butnstep {% if statuses[i] == 1 %} completed {% else %} not-completed {% endif %}">
           <form method="POST" class="btn">
