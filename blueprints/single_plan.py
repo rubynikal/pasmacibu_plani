@@ -1,6 +1,7 @@
 from flask import Blueprint, request, session, redirect, render_template, url_for
 import sqlite3
-from blueprints.jauns_plans import formating
+from blueprints.jauns_plans import formating, remove_ltv, resources
+import regex
 
 #viena plāna lapa
 single_bp = Blueprint("single", __name__)
@@ -10,7 +11,7 @@ def single(nosaukums):
   """Veido viena plāna lapu, izmantojot template plan.html. Lapā var apskatīt visus plāna soļus, atzīmēt un pārskatīt progresu."""
   if "username" not in session:
     return redirect(url_for("login.login"))
-  
+  d_ievads = ""
   #dabūt plāna detāļas no datubāzes
   with sqlite3.connect("users.db") as conn:
     cur = conn.cursor()
@@ -22,6 +23,12 @@ def single(nosaukums):
     #ja plāns tika atrasts
     nosaukums = plans[2]
     correct_plans = formating(plans[1])
+    ievads_start = plans[1].find("Ievads:")
+    ievads_end = plans[1].find("Nr. 1") if "Nr. 1" in plans[1] else len(plans[1])
+    ievads = plans[1][ievads_start:ievads_end].strip() if ievads_start != -1 else ""
+    c_ievads = regex.sub(r'\d+\. diena', '', ievads).strip()
+    d_ievads = c_ievads.replace("Ievads:", "<span>Ievads:</span>")
+
 
     #pārveidot statusus listā
     done_st = list(map(int, plans[3].split(','))) 
@@ -45,8 +52,9 @@ def single(nosaukums):
     completed = sum(done_st)
     total = len(done_st)
     perc = int((completed/total)*100)
+    ievads_d = d_ievads + resources(nosaukums)
 
-    return render_template("plan.html", logged_in=True, nosaukums=nosaukums, plans=correct_plans, statuses=done_st, completed=completed, total=total, perc=perc)
+    return render_template("plan.html", logged_in=True, nosaukums=nosaukums, plans=correct_plans, statuses=done_st, completed=completed, total=total, perc=perc, ievads=ievads_d)
     
   else:
     return "Plan not found", 404
