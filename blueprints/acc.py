@@ -1,53 +1,43 @@
-{% extends  "base.html" %}
-{% block title %} {{ name }} {% endblock %}
+from flask import Blueprint, request, session, redirect, render_template, url_for
+import sqlite3
+from blueprints.all_plans import get_names_done
 
-{% block content %}
-  <div class="account">
-    <h1>{{ name }}</h1>
-    <button id="theme-toggle">Izmainīt tēmu</button>
-    <h3>Plāni, kas ir progresā</h3>
-    <table>
-      <tr>
-        <th>Plāna nosaukums</th>
-        <th>Progress</th>
-      </tr>
-      {% for i in range(in_progress|length) %}
-      <tr>
-        <td><a href="{{ url_for('single.single', nosaukums=in_progress[i][0]) }}">{{in_progress[i][0]}}</a></td>
-        <td><progress value="{{ in_progress_st[i][0] }}" max="{{ in_progress_st[i][1] }}"></progress></td>
-      </tr>
-      {% endfor %}
-    </table> 
-    <h3> Jūs pabeidzāt {{completed_count}} plānus, un Jums ir {{not_started_count}} neuzsākti plani! </h3>
-    <hr> <br>
-    <form method="POST">
-      <button type="submit">Nodzēst kontu</button>
-    </form>
-    <p>*Šī darbība ir neatgriezeniskā. Visi uzģenerēti plāni arī tiks nodzēsti.</p>
-  </div>
+#konta lapa
+acc_bp = Blueprint("acc", __name__)
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const themeToggle = document.getElementById('theme-toggle');
-      const currentTheme = localStorage.getItem('theme');
-
-      if (currentTheme === 'light') {
-        document.documentElement.classList.add('light-mode');
-      }
-
-      themeToggle.addEventListener('click', function () {
-        const isLightMode = document.documentElement.classList.contains('light-mode');
-
-        if (isLightMode) {
-          document.documentElement.classList.remove('light-mode');
-          localStorage.setItem('theme', 'dark');
-        } else {
-          document.documentElement.classList.add('light-mode');
-          localStorage.setItem('theme', 'light');
-        }
-      });
-    });
-
-  </script>
+@acc_bp.route("/<username>", methods=["GET","POST"])
+def acc(username):
+  """Veido konta lapu, izmantojot template acc.html. Lapā var apskatīt lietotāja radītāju tabulu un nodzēst kontu."""
+  if "username" not in session:
+    return redirect(url_for("login.login"))
   
-{% endblock %}
+  in_progress = []
+  in_progress_st = []
+  not_started_count = 0
+  completed_count = 0
+
+  #radītāju tabula
+  names_dones = get_names_done(session["username"])
+  for name in names_dones:
+    done_st = list(map(int, name[1].split(','))) 
+
+    if sum(done_st) == len(done_st):
+      completed_count += 1
+    elif sum(done_st) == 0:
+      not_started_count += 1
+    else:
+      in_progress.append(name)
+      in_progress_st.append((sum(done_st), len(done_st)))
+
+  #konta dzēšana
+  if request.method == "POST":
+    with sqlite3.connect("users.db") as conn:
+      cur = conn.cursor()
+      cur.execute("PRAGMA foreign_keys = ON")
+      cur.execute(" DELETE FROM Users WHERE username=? ", (username,))
+      conn.commit()
+    session.pop("username", None)
+    return redirect("landing")
+  
+  return render_template("acc.html", logged_in=True, name=username, in_progress=in_progress, in_progress_st=in_progress_st, completed_count=completed_count, not_started_count=not_started_count)
+  
