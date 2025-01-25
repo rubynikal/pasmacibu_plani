@@ -29,6 +29,16 @@
   <div class="content">
     {% block content %}{% endblock %}
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // pābaudīt režimu
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    });
+  </script>
+
   
 </body>
 </html>
