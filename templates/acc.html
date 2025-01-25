@@ -4,6 +4,7 @@
 {% block content %}
   <div class="account">
     <h1>{{ name }}</h1>
+    <button id="theme-toggle">Izmainīt tēmu</button>
     <h3>Plāni, kas ir progresā</h3>
     <table>
       <tr>
@@ -24,5 +25,29 @@
     </form>
     <p>*Šī darbība ir neatgriezeniskā. Visi uzģenerēti plāni arī tiks nodzēsti.</p>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const themeToggle = document.getElementById('theme-toggle');
+      const currentTheme = localStorage.getItem('theme');
+
+      if (currentTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+
+      themeToggle.addEventListener('click', function () {
+        const isLightMode = document.documentElement.classList.contains('light-mode');
+
+        if (isLightMode) {
+          document.documentElement.classList.remove('light-mode');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          document.documentElement.classList.add('light-mode');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    });
+
+  </script>
   
 {% endblock %}
